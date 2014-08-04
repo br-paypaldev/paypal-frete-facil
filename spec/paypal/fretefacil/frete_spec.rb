@@ -12,7 +12,7 @@ describe PayPal::FreteFacil::Frete do
         :peso => 0.0
       }.each do |attr, value|
         it attr do
-          @frete.send(attr).should eq(value)
+          expect(@frete.send(attr)).to eq(value)
         end
       end
     end
@@ -29,14 +29,14 @@ describe PayPal::FreteFacil::Frete do
       context "when #{attr} is supplied" do
         it "sets #{attr}" do
           @frete = PayPal::FreteFacil::Frete.new(attr => value)
-          @frete.send(attr).should eq(value)
+          expect(@frete.send(attr)).to eq(value)
         end
       end
 
       context "when #{attr} is supplied in a block" do
         it "sets #{attr}" do
           @frete = PayPal::FreteFacil::Frete.new { |f| f.send("#{attr}=", value) }
-          @frete.send(attr).should eq(value)
+          expect(@frete.send(attr)).to eq(value)
         end
       end
     end
@@ -64,7 +64,7 @@ describe PayPal::FreteFacil::Frete do
     end
 
     it "returns shipping price" do
-      @frete.calcular.should eq(8.20)
+      expect(@frete.calcular).to eq(8.19)
     end
   end
 end
