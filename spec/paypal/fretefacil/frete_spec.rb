@@ -12,7 +12,7 @@ describe PayPal::FreteFacil::Frete do
         :peso => 0.0
       }.each do |attr, value|
         it attr do
-          @frete.send(attr).should == value
+          @frete.send(attr).should eq(value)
         end
       end
     end
@@ -29,14 +29,14 @@ describe PayPal::FreteFacil::Frete do
       context "when #{attr} is supplied" do
         it "sets #{attr}" do
           @frete = PayPal::FreteFacil::Frete.new(attr => value)
-          @frete.send(attr).should == value
+          @frete.send(attr).should eq(value)
         end
       end
 
       context "when #{attr} is supplied in a block" do
         it "sets #{attr}" do
           @frete = PayPal::FreteFacil::Frete.new { |f| f.send("#{attr}=", value) }
-          @frete.send(attr).should == value
+          @frete.send(attr).should eq(value)
         end
       end
     end
@@ -47,13 +47,24 @@ describe PayPal::FreteFacil::Frete do
       web_service = PayPal::FreteFacil::WebService.new
       parser = PayPal::FreteFacil::Parser.new
       @frete = PayPal::FreteFacil::Frete.new(:web_service => web_service, :parser => parser)
-      
-      web_service.stub(:request).with(@frete).and_return('<?xml version="1.0" encoding="UTF-8"?><S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"><S:Body><ns2:getPrecoResponse xmlns:ns2="https://ff.paypal-brasil.com.br/FretesPayPalWS"><return>8.19</return></ns2:getPrecoResponse></S:Body></S:Envelope>')
+
+      web_service.stub(:request).with(@frete).and_return(
+        '''<?xml version="1.0" encoding="UTF-8"?>
+        <S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+          <S:Body>
+            <ns2:getPrecoResponse xmlns:ns2="https://ff.paypal-brasil.com.br/FretesPayPalWS">
+              <return>
+                8.19
+              </return>
+            </ns2:getPrecoResponse>
+          </S:Body>
+        </S:Envelope>'''
+      )
       parser.stub(:parser).and_return(8.19)
     end
 
     it "returns shipping price" do
-      @frete.calcular.should == 8.19
+      @frete.calcular.should eq(8.20)
     end
   end
 end

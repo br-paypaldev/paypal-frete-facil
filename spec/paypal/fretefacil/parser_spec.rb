@@ -15,7 +15,7 @@ describe PayPal::FreteFacil::Parser do
                      </ns2:getPrecoResponse>
                    </S:Body>
                  </S:Envelope>"""
-        @parser.parse(xml).should == 8.19
+        @parser.parse(xml).should eq(8.19)
       end
 
       context "and shipping price has more then two decimal places" do
@@ -28,7 +28,7 @@ describe PayPal::FreteFacil::Parser do
                        </ns2:getPrecoResponse>
                      </S:Body>
                    </S:Envelope>"""
-          @parser.parse(xml).should == 8.23
+          @parser.parse(xml).should eq(8.23)
         end
       end
     end
